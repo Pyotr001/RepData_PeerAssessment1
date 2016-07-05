@@ -1,16 +1,12 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
 Code for reading in the dataset and/or processing the data
 
 1. Load the data (i.e. 𝚛𝚎𝚊𝚍.𝚌𝚜𝚟())
-```{r}
+
+```r
 data <- read.csv(unzip("activity.zip"))
 ```
 
@@ -18,7 +14,8 @@ data <- read.csv(unzip("activity.zip"))
 
 Перводим время в POSIXlt
 
-```{r}
+
+```r
 data$date <- as.POSIXlt(data$date)
 ```
 
