@@ -16,10 +16,9 @@ data <- read.csv(unzip("activity.zip"))
 
 
 ```r
-data$date <- as.POSIXlt(data$date)
+data$dateD_lt <- as.POSIXlt(data$date)
+data$dateD_ct <- as.POSIXct(data$date)
 ```
-
-
 
 
 
@@ -28,10 +27,37 @@ data$date <- as.POSIXlt(data$date)
 Histogram of the total number of steps taken each day
 
 1. Calculate the total number of steps taken per day
+
+```r
+steps_number <- tapply(data$steps, data$dateD_ct, sum)
+```
+
 2. If you do not understand the difference between a histogram and a barplot, research the difference between them. Make a histogram of the total number of steps taken each day
+
+```r
+hist(steps_number, xlab = "number of steps", main = "the total number of steps taken each day")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+
 3. Calculate and report the mean and median of the total number of steps taken per day
 
+Mean 
 
+```r
+mean(tapply(data$steps, data$dateD_ct, sum), na.rm = T)
+```
+
+```
+## [1] 10766.19
+```
+
+Median
+
+```r
+pim <- median(tapply(data$steps, data$dateD_ct, sum), na.rm = T)
+```
+10765
 
 ## What is the average daily activity pattern?
 Mean and median number of steps taken each day
