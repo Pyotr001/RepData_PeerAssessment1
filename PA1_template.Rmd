@@ -108,8 +108,8 @@ barplot(is.na(data$steps))
 
 ```{r}
 dataFix <- data
-for (i in unique(dataFix$mean_interval)) {
-        dataFix$steps[is.na(dataFix$steps) & dataFix$interval == i] <- median(dataFix$steps[data$interval == i])
+for (i in unique(dataFix$interval)) {
+        dataFix$steps[is.na(dataFix$steps) & dataFix$interval == i] <- median(dataFix$steps[data$interval == i], na.rm = T)
 }
 ```
 
