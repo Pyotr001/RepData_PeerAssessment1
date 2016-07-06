@@ -19,8 +19,7 @@ data <- read.csv(unzip("activity.zip"))
 Перводим время в POSIXlt
 
 ```{r}
-data$dateD_lt <- as.POSIXlt(data$date)
-data$dateD_ct <- as.POSIXct(data$date)
+data$date <- as.POSIXct(data$date)
 ```
 
 
@@ -31,7 +30,7 @@ Histogram of the total number of steps taken each day
 
 1. Calculate the total number of steps taken per day
 ```{r}
-steps_number <- tapply(data$steps, data$dateD_ct, sum)
+steps_number <- tapply(data$steps, data$date, sum)
 ```
 
 2. If you do not understand the difference between a histogram and a barplot, research the difference between them. Make a histogram of the total number of steps taken each day
@@ -43,12 +42,14 @@ hist(steps_number, xlab = "number of steps", main = "the total number of steps t
 
 Mean 
 ```{r mean}
-mean(tapply(data$steps, data$dateD_ct, sum), na.rm = T)
+meanDay <- mean(tapply(data$steps, data$date, sum), na.rm = T)
+print(meanDay)
 ```
 
 Median
 ```{r}
- median(tapply(data$steps, data$dateD_ct, sum), na.rm = T)
+ medianDay <- median(tapply(data$steps, data$date, sum), na.rm = T)
+print(medianDay)
 ```
 
 
@@ -59,17 +60,17 @@ The 5-minute interval that, on average, contains the maximum number of steps
 
 1. Make a time series plot (i.e. 𝚝𝚢𝚙𝚎 = "𝚕") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 ```{r}
+
 mean_interval <- tapply(data$steps, data$interval, mean, na.rm = T)
+
 plot(mean_interval, type = "l", main = "time series plot", xlab = "the 5-minute interval", ylab = "the average number of steps")
 ```
 
 
 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps? 
 ```{r}
-b <- which.max(mean_interval)
-b
+which.max(mean_interval)
 ```
-`r b`
 
 
 ## Imputing missing values
@@ -77,8 +78,41 @@ Code to describe and show a strategy for imputing missing data
 Histogram of the total number of steps taken each day after missing values are imputed
 
 1. Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with 𝙽𝙰s)
+```{r}
+stepsNA <- sum(is.na(data$steps))
+dateNA <- sum(is.na(data$date))
+intervalNA <- sum(is.na(data$interval))
+```
+Missing values in steps is `r stepsNA`.
+
+Missing values in date is `r dateNA`.
+
+Missing values in interval is `r intervalNA`
+
+
+NA pattern explore
+```{r}
+table(is.na(data$steps), data$interval)
+```
+
+```{r}
+barplot(is.na(data$steps))
+```
+
+
 2. Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
+
+
+
 3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
+
+```{r}
+dataFix <- data
+for (i in unique(dataFix$mean_interval)) {
+        dataFix$steps[is.na(dataFix$steps) & dataFix$interval == i] <- median(dataFix$steps[data$interval == i])
+}
+```
+
 4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
 
 
