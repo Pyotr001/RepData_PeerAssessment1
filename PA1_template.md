@@ -264,4 +264,36 @@ Panel plot comparing the average number of steps taken per 5-minute interval acr
 For this part the 𝚠𝚎𝚎𝚔𝚍𝚊𝚢𝚜() function may be of some help here. Use the dataset with the filled-in missing values for this part.
 
 1. Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
+
+```r
+dataFix$weekD <- as.POSIXlt(data$date)$wday == 0 | as.POSIXlt(data$date)$wday == 6
+
+dataFix$weekD <- factor(dataFix$weekD, levels = c(F, T), labels = c("weekday", "weekend"))
+```
+
+
 2. Make a panel plot containing a time series plot (i.e. 𝚝𝚢𝚙𝚎 = "𝚕") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.
+
+
+```r
+stepsWeekD <- tapply(dataFix$steps[dataFix$weekD == "weekday"], dataFix$interval[dataFix$weekD == "weekday"], mean)
+
+stepsWeekE <- tapply(dataFix$steps[dataFix$weekD == "weekend"], dataFix$interval[dataFix$weekD == "weekend"], mean)
+```
+
+
+```r
+par(mfrow = c(2,1))
+plot(stepsWeekD, type = "l", main = "weekdays"
+     ,xlab = "the 5-minute interval"
+     ,ylab = "the average number of steps")
+
+plot(stepsWeekE, type = "l", main = "weekdends"
+     ,xlab = "the 5-minute interval"
+     ,ylab = "the average number of steps")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
+
+
+
