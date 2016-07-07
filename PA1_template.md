@@ -220,13 +220,42 @@ barplot(is.na(data$steps))
 
 ```r
 dataFix <- data
-for (i in unique(dataFix$mean_interval)) {
-        dataFix$steps[is.na(dataFix$steps) & dataFix$interval == i] <- median(dataFix$steps[data$interval == i])
+for (i in unique(dataFix$interval)) {
+        dataFix$steps[is.na(dataFix$steps) & dataFix$interval == i] <- round(mean(dataFix$steps[data$interval == i], na.rm = T))
 }
 ```
 
 4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
 
+
+```r
+steps_numberFix <- tapply(dataFix$steps, dataFix$date, sum)
+
+hist(steps_numberFix, xlab = "number of steps", main = "the total number of steps taken each day Fix")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
+
+```r
+meanDayFix <- mean(steps_numberFix)
+medianDayFix <- median(steps_numberFix)
+```
+
+```r
+meanDay - meanDayFix
+```
+
+```
+## [1] 0.549335
+```
+
+```r
+medianDay - medianDayFix
+```
+
+```
+## [1] 3
+```
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
